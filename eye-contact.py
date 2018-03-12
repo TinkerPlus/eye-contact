@@ -1,18 +1,32 @@
 from subprocess import call
-
+from pygame import key
 
 
 def cupture_video():
     '''
     use shell command 'raspivid' 
     '''
-    call(['raspivid', '-o', 'eye'])
+    call(['raspivid', '-o', 'eye.h264'])
+
+def convert_video():
+    '''
+    use shell command 'MP4Box -add video.h264 video.mp4'
+    sudo apt-get install -y gpac
+    '''
+    call(["MP4Box", "-add", "eye.h264", "eye.mp4"])
+
+def clear_history():
+    '''
+    rm the last eye*
+    '''
+    call(["rm", "eye.mp4"])
+
 
 def display_video():
     '''
     use shell command 'omxplayer'
     '''
-    call(['omxplayer', 'eye'])
+    call(['omxplayer', 'eye.mp4'])
 
 
 def trigger():
@@ -21,6 +35,13 @@ def trigger():
     return 0 or 1 to close or open this system
     '''
     pass
+
+def main():
+    cupture_video()
+    clear_history() # insure the eye.mp4 is not exist.
+    convert_video()
+    display_video()
+
 
 # option
 def eye_trigger():
